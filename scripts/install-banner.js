@@ -1,6 +1,6 @@
 /**
  * Install Banner Module
- * Deterministic install banner flow for PWA-capable browsers.
+ * Smart install banner flow with session-only dismiss.
  */
 class InstallBanner {
   constructor(banner, installButton, dismissButton) {
@@ -10,8 +10,7 @@ class InstallBanner {
     this.titleElement = document.getElementById('installTitle');
     this.descriptionElement = document.getElementById('installDescription');
     this.deferredPrompt = null;
-    this.dismissedKey = 'dbc-install-dismissed';
-    this.installedKey = 'dbc-pwa-installed';
+    this.dismissedForCurrentView = false;
 
     this.init();
   }
@@ -30,12 +29,7 @@ class InstallBanner {
 
     this.hide();
 
-    if (InstallBanner.isStandaloneMode()) {
-      this.markInstalled();
-      return;
-    }
-
-    if (this.wasInstalled() || this.isDismissed()) {
+    if (this.isInstalledEnvironment()) {
       return;
     }
 
@@ -48,7 +42,7 @@ class InstallBanner {
     }
 
     window.addEventListener('beforeinstallprompt', (event) => {
-      if (this.wasInstalled() || this.isDismissed() || InstallBanner.isStandaloneMode()) {
+      if (this.isInstalledEnvironment() || this.dismissedForCurrentView) {
         this.hide();
         return;
       }
@@ -61,24 +55,23 @@ class InstallBanner {
 
     window.addEventListener('appinstalled', () => {
       this.deferredPrompt = null;
-      this.markInstalled();
       this.hide();
     });
 
     const displayModeMedia = window.matchMedia('(display-mode: standalone)');
     displayModeMedia.addEventListener('change', (event) => {
       if (event.matches) {
-        this.markInstalled();
         this.hide();
       }
     });
 
+    // Show for non-installed users. If prompt arrives later, it replaces fallback.
     this.setDefaultCopy();
     this.show();
   }
 
   show() {
-    if (!this.banner || this.wasInstalled() || this.isDismissed() || InstallBanner.isStandaloneMode()) {
+    if (!this.banner || this.isInstalledEnvironment() || this.dismissedForCurrentView) {
       return;
     }
 
@@ -102,6 +95,11 @@ class InstallBanner {
   }
 
   async handleInstall() {
+    if (this.isInstalledEnvironment()) {
+      this.hide();
+      return;
+    }
+
     if (!this.deferredPrompt) {
       if (this.descriptionElement) {
         this.descriptionElement.textContent =
@@ -124,7 +122,8 @@ class InstallBanner {
   }
 
   dismiss() {
-    localStorage.setItem(this.dismissedKey, '1');
+    // Dismiss only for current view; reappears after reload.
+    this.dismissedForCurrentView = true;
     this.deferredPrompt = null;
     this.hide();
   }
@@ -138,15 +137,7 @@ class InstallBanner {
     }
   }
 
-  markInstalled() {
-    localStorage.setItem(this.installedKey, '1');
-  }
-
-  wasInstalled() {
-    return localStorage.getItem(this.installedKey) === '1';
-  }
-
-  isDismissed() {
-    return localStorage.getItem(this.dismissedKey) === '1';
+  isInstalledEnvironment() {
+    return InstallBanner.isStandaloneMode();
   }
 }
