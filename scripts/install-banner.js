@@ -8,7 +8,7 @@ class InstallBanner {
     this.installButton = installButton;
     this.dismissButton = dismissButton;
     this.deferredPrompt = null;
-    this.storageKey = 'dbc-install-banner-dismissed';
+    this.descriptionElement = document.getElementById('installDescription');
 
     this.init();
   }
@@ -22,10 +22,7 @@ class InstallBanner {
 
   init() {
     if (!this.banner || InstallBanner.isStandalone()) {
-      return;
-    }
-
-    if (localStorage.getItem(this.storageKey) === '1') {
+      this.hide();
       return;
     }
 
@@ -35,6 +32,11 @@ class InstallBanner {
       this.show();
     });
 
+    window.addEventListener('appinstalled', () => {
+      this.deferredPrompt = null;
+      this.hide();
+    });
+
     if (this.installButton) {
       this.installButton.addEventListener('click', () => this.install());
     }
@@ -42,6 +44,10 @@ class InstallBanner {
     if (this.dismissButton) {
       this.dismissButton.addEventListener('click', () => this.dismiss());
     }
+
+    // Show for non-installed users on every visit/reload.
+    this.show();
+    this.applyPlatformHint();
   }
 
   show() {
@@ -60,6 +66,7 @@ class InstallBanner {
 
   async install() {
     if (!this.deferredPrompt) {
+      this.applyPlatformHint();
       return;
     }
 
@@ -70,7 +77,21 @@ class InstallBanner {
   }
 
   dismiss() {
-    localStorage.setItem(this.storageKey, '1');
+    // Session-only dismiss; banner returns next visit if not installed.
     this.hide();
+  }
+
+  applyPlatformHint() {
+    if (!this.descriptionElement || this.deferredPrompt) {
+      return;
+    }
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+
+    if (isIOS && isSafari && !InstallBanner.isStandalone()) {
+      this.descriptionElement.textContent = 'On iPhone: tap Share, then Add to Home Screen.';
+    }
   }
 }

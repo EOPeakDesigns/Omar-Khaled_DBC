@@ -18,6 +18,24 @@
  * Improves UX on tablets and mobile devices
  */
 @media (max-width: 768px) {
+  body {
+    align-items: stretch;
+  }
+
+  .card-container {
+    max-width: none;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    align-items: stretch;
+  }
+
+  .card {
+    min-height: 100%;
+    border-radius: 0;
+  }
+
   /**
    * Disable social button hover effects
    */
@@ -70,7 +88,7 @@
    * Maximizes available screen space
    */
   .card-container {
-    padding: 10px;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
   
   /**
