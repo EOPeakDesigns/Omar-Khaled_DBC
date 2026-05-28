@@ -59,10 +59,6 @@ class InstallBanner {
       this.dismissButton.addEventListener('click', () => this.dismiss());
     }
 
-    if (this.wasInstalled()) {
-      await this.revalidateInstalledState();
-    }
-
     if (this.shouldStayHidden()) {
       this.hide();
       return;
@@ -170,21 +166,6 @@ class InstallBanner {
 
   shouldStayHidden() {
     return InstallBanner.isStandalone() || this.wasInstalled() || this.isDismissedInSession();
-  }
-
-  async revalidateInstalledState() {
-    if (typeof navigator.getInstalledRelatedApps !== 'function') {
-      return;
-    }
-
-    try {
-      const relatedApps = await navigator.getInstalledRelatedApps();
-      if (Array.isArray(relatedApps) && relatedApps.length === 0) {
-        localStorage.removeItem(this.installedKey);
-      }
-    } catch (error) {
-      // Keep the stored installed state when browser support is partial.
-    }
   }
 
   isIOSSafari() {
