@@ -11,6 +11,7 @@ class InstallBanner {
     this.descriptionElement = document.getElementById('installDescription');
     this.titleElement = document.getElementById('installTitle');
     this.installedKey = 'dbc-pwa-installed';
+    this.dismissedSessionKey = 'dbc-install-dismissed-session';
 
     this.init();
   }
@@ -35,7 +36,7 @@ class InstallBanner {
       event.preventDefault();
       this.deferredPrompt = event;
 
-      if (this.wasInstalled()) {
+      if (this.shouldStayHidden()) {
         this.hide();
         return;
       }
@@ -62,7 +63,7 @@ class InstallBanner {
       await this.revalidateInstalledState();
     }
 
-    if (this.wasInstalled()) {
+    if (this.shouldStayHidden()) {
       this.hide();
       return;
     }
@@ -73,7 +74,7 @@ class InstallBanner {
   }
 
   show() {
-    if (this.banner) {
+    if (this.banner && !this.shouldStayHidden()) {
       this.banner.hidden = false;
       this.banner.classList.add('active');
     }
@@ -110,7 +111,8 @@ class InstallBanner {
   }
 
   dismiss() {
-    // Session-only dismiss; banner returns next visit if not installed.
+    // Hide for the current browser session.
+    sessionStorage.setItem(this.dismissedSessionKey, '1');
     this.hide();
   }
 
@@ -160,6 +162,14 @@ class InstallBanner {
 
   wasInstalled() {
     return localStorage.getItem(this.installedKey) === '1';
+  }
+
+  isDismissedInSession() {
+    return sessionStorage.getItem(this.dismissedSessionKey) === '1';
+  }
+
+  shouldStayHidden() {
+    return InstallBanner.isStandalone() || this.wasInstalled() || this.isDismissedInSession();
   }
 
   async revalidateInstalledState() {
