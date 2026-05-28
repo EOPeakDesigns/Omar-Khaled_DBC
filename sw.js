@@ -2,7 +2,7 @@
  * Service Worker - Digital Business Card
  * Cache version must be incremented when static assets change.
  */
-const CACHE_NAME = 'dbc-gm-v9';
+const CACHE_NAME = 'dbc-gm-v10';
 
 const PRECACHE_URLS = [
   './',

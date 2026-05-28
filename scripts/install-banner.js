@@ -1,6 +1,6 @@
 /**
  * Install Banner Module
- * Handles PWA install prompt with dismiss persistence.
+ * Handles PWA install prompt with deterministic visibility rules.
  */
 class InstallBanner {
   constructor(banner, installButton, dismissButton) {
@@ -8,10 +8,8 @@ class InstallBanner {
     this.installButton = installButton;
     this.dismissButton = dismissButton;
     this.deferredPrompt = null;
-    this.descriptionElement = document.getElementById('installDescription');
-    this.titleElement = document.getElementById('installTitle');
     this.installedKey = 'dbc-pwa-installed';
-    this.dismissedSessionKey = 'dbc-install-dismissed-session';
+    this.dismissedKey = 'dbc-install-dismissed';
 
     this.init();
   }
@@ -23,25 +21,32 @@ class InstallBanner {
     );
   }
 
-  async init() {
-    if (!this.banner || InstallBanner.isStandalone()) {
-      this.markInstalled();
-      this.hide();
+  init() {
+    if (!this.banner) {
       return;
     }
 
     this.hide();
 
-    window.addEventListener('beforeinstallprompt', (event) => {
-      event.preventDefault();
-      this.deferredPrompt = event;
+    if (InstallBanner.isStandalone()) {
+      this.markInstalled();
+      this.hide();
+      return;
+    }
 
-      if (this.shouldStayHidden()) {
+    if (this.wasInstalled() || this.isInstallDismissed()) {
+      this.hide();
+      return;
+    }
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+      if (this.shouldHideBanner()) {
         this.hide();
         return;
       }
 
-      this.setNativeInstallMode();
+      event.preventDefault();
+      this.deferredPrompt = event;
       this.show();
     });
 
@@ -58,19 +63,10 @@ class InstallBanner {
     if (this.dismissButton) {
       this.dismissButton.addEventListener('click', () => this.dismiss());
     }
-
-    if (this.shouldStayHidden()) {
-      this.hide();
-      return;
-    }
-
-    this.setNativeInstallMode();
-    this.applyPlatformHint();
-    this.show();
   }
 
   show() {
-    if (this.banner && !this.shouldStayHidden()) {
+    if (this.banner && !this.shouldHideBanner()) {
       this.banner.hidden = false;
       this.banner.classList.add('active');
     }
@@ -85,11 +81,7 @@ class InstallBanner {
 
   async install() {
     if (!this.deferredPrompt) {
-      this.applyPlatformHint();
-      if (this.descriptionElement && !this.isIOSSafari()) {
-        this.descriptionElement.textContent = 'If install does not start, use your browser menu and choose Install app or Add to Home Screen.';
-      }
-      this.show();
+      // Only prompt install from real deferred event.
       return;
     }
 
@@ -101,55 +93,14 @@ class InstallBanner {
       this.markInstalled();
       this.hide();
     } else {
-      this.setNativeInstallMode();
-      this.show();
+      this.hide();
     }
   }
 
   dismiss() {
-    // Hide for the current browser session.
-    sessionStorage.setItem(this.dismissedSessionKey, '1');
+    localStorage.setItem(this.dismissedKey, '1');
+    this.deferredPrompt = null;
     this.hide();
-  }
-
-  applyPlatformHint() {
-    if (!this.descriptionElement || this.deferredPrompt) {
-      return;
-    }
-
-    if (this.isIOSSafari() && !InstallBanner.isStandalone()) {
-      this.setManualInstallMode('On iPhone: tap Share, then Add to Home Screen.');
-    }
-  }
-
-  setNativeInstallMode() {
-    if (this.titleElement) {
-      this.titleElement.textContent = 'Add to Home Screen';
-    }
-    if (this.descriptionElement) {
-      this.descriptionElement.textContent = 'Install this card for quick access';
-    }
-    if (this.installButton) {
-      this.installButton.hidden = false;
-      this.installButton.disabled = false;
-      this.installButton.textContent = 'Install';
-      this.installButton.setAttribute('aria-disabled', 'false');
-    }
-  }
-
-  setManualInstallMode(message = 'Use your browser menu to add this card to your Home Screen.') {
-    if (this.titleElement) {
-      this.titleElement.textContent = 'Add to Home Screen';
-    }
-    if (this.descriptionElement) {
-      this.descriptionElement.textContent = message;
-    }
-    if (this.installButton) {
-      this.installButton.hidden = false;
-      this.installButton.disabled = false;
-      this.installButton.textContent = 'Install';
-      this.installButton.setAttribute('aria-disabled', 'false');
-    }
   }
 
   markInstalled() {
@@ -160,18 +111,11 @@ class InstallBanner {
     return localStorage.getItem(this.installedKey) === '1';
   }
 
-  isDismissedInSession() {
-    return sessionStorage.getItem(this.dismissedSessionKey) === '1';
+  isInstallDismissed() {
+    return localStorage.getItem(this.dismissedKey) === '1';
   }
 
-  shouldStayHidden() {
-    return InstallBanner.isStandalone() || this.wasInstalled() || this.isDismissedInSession();
-  }
-
-  isIOSSafari() {
-    const ua = navigator.userAgent || '';
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
-    return isIOS && isSafari;
+  shouldHideBanner() {
+    return InstallBanner.isStandalone() || this.wasInstalled() || this.isInstallDismissed();
   }
 }
