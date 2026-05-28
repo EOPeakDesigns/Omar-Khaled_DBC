@@ -22,17 +22,24 @@ class InstallBanner {
     );
   }
 
-  init() {
+  async init() {
     if (!this.banner || InstallBanner.isStandalone()) {
       this.markInstalled();
       this.hide();
       return;
     }
 
+    this.hide();
+
     window.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
-      localStorage.removeItem(this.installedKey);
       this.deferredPrompt = event;
+
+      if (this.wasInstalled()) {
+        this.hide();
+        return;
+      }
+
       this.setNativeInstallMode();
       this.show();
     });
@@ -49,6 +56,10 @@ class InstallBanner {
 
     if (this.dismissButton) {
       this.dismissButton.addEventListener('click', () => this.dismiss());
+    }
+
+    if (this.wasInstalled()) {
+      await this.revalidateInstalledState();
     }
 
     if (this.wasInstalled()) {
@@ -149,6 +160,21 @@ class InstallBanner {
 
   wasInstalled() {
     return localStorage.getItem(this.installedKey) === '1';
+  }
+
+  async revalidateInstalledState() {
+    if (typeof navigator.getInstalledRelatedApps !== 'function') {
+      return;
+    }
+
+    try {
+      const relatedApps = await navigator.getInstalledRelatedApps();
+      if (Array.isArray(relatedApps) && relatedApps.length === 0) {
+        localStorage.removeItem(this.installedKey);
+      }
+    } catch (error) {
+      // Keep the stored installed state when browser support is partial.
+    }
   }
 
   isIOSSafari() {

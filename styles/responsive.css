@@ -18,22 +18,12 @@
  * Improves UX on tablets and mobile devices
  */
 @media (max-width: 768px) {
-  body {
-    align-items: stretch;
-  }
-
   .card-container {
-    max-width: none;
+    max-width: 420px;
     width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    align-items: stretch;
-  }
-
-  .card {
-    min-height: 100%;
-    border-radius: 0;
+    min-height: auto;
+    padding: calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
+    align-items: center;
   }
 
   /**
@@ -88,7 +78,8 @@
    * Maximizes available screen space
    */
   .card-container {
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    max-width: 100%;
+    padding: calc(8px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(8px + env(safe-area-inset-left));
   }
   
   /**
