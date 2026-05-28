@@ -82,7 +82,6 @@ body.modal-open {
 .install-banner {
   position: fixed;
   right: 12px;
-  left: auto;
   bottom: calc(12px + env(safe-area-inset-bottom));
   z-index: 1001;
   background: var(--surface);
@@ -93,7 +92,15 @@ body.modal-open {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  width: min(320px, calc(100vw - 24px));
+  width: min(340px, calc(100vw - 24px));
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.install-banner.active {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .install-banner-content {

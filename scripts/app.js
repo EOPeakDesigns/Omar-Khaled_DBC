@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   const bindActionBlur = () => {
     const actionable = document.querySelectorAll(
-      '.social-btn, .copy-btn, .contact-side-btn, .install-btn, .modal-close, .download-btn, .video-avatar-btn'
+      '.social-btn, .copy-btn, .contact-side-btn, .modal-close, .download-btn, .video-avatar-btn, .install-btn'
     );
 
     actionable.forEach((el) => {

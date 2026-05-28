@@ -49,7 +49,6 @@ v0/
 │  ├─ vcard-handler.js
 │  ├─ share-handler.js
 │  ├─ copy-handler.js
-│  ├─ install-banner.js
 │  └─ focus-trap.js
 └─ assets/
 ```

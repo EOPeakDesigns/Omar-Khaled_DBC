@@ -1,20 +1,22 @@
 /**
  * Install Banner Module
- * Handles PWA install prompt with deterministic visibility rules.
+ * Deterministic install banner flow for PWA-capable browsers.
  */
 class InstallBanner {
   constructor(banner, installButton, dismissButton) {
     this.banner = banner;
     this.installButton = installButton;
     this.dismissButton = dismissButton;
+    this.titleElement = document.getElementById('installTitle');
+    this.descriptionElement = document.getElementById('installDescription');
     this.deferredPrompt = null;
-    this.installedKey = 'dbc-pwa-installed';
     this.dismissedKey = 'dbc-install-dismissed';
+    this.installedKey = 'dbc-pwa-installed';
 
     this.init();
   }
 
-  static isStandalone() {
+  static isStandaloneMode() {
     return (
       window.matchMedia('(display-mode: standalone)').matches ||
       window.navigator.standalone === true
@@ -28,25 +30,32 @@ class InstallBanner {
 
     this.hide();
 
-    if (InstallBanner.isStandalone()) {
+    if (InstallBanner.isStandaloneMode()) {
       this.markInstalled();
-      this.hide();
       return;
     }
 
-    if (this.wasInstalled() || this.isInstallDismissed()) {
-      this.hide();
+    if (this.wasInstalled() || this.isDismissed()) {
       return;
+    }
+
+    if (this.installButton) {
+      this.installButton.addEventListener('click', () => this.handleInstall());
+    }
+
+    if (this.dismissButton) {
+      this.dismissButton.addEventListener('click', () => this.dismiss());
     }
 
     window.addEventListener('beforeinstallprompt', (event) => {
-      if (this.shouldHideBanner()) {
+      if (this.wasInstalled() || this.isDismissed() || InstallBanner.isStandaloneMode()) {
         this.hide();
         return;
       }
 
       event.preventDefault();
       this.deferredPrompt = event;
+      this.setDefaultCopy();
       this.show();
     });
 
@@ -56,32 +65,41 @@ class InstallBanner {
       this.hide();
     });
 
-    if (this.installButton) {
-      this.installButton.addEventListener('click', () => this.install());
-    }
-
-    if (this.dismissButton) {
-      this.dismissButton.addEventListener('click', () => this.dismiss());
-    }
+    const displayModeMedia = window.matchMedia('(display-mode: standalone)');
+    displayModeMedia.addEventListener('change', (event) => {
+      if (event.matches) {
+        this.markInstalled();
+        this.hide();
+      }
+    });
   }
 
   show() {
-    if (this.banner && !this.shouldHideBanner()) {
-      this.banner.hidden = false;
-      this.banner.classList.add('active');
+    if (!this.banner || this.wasInstalled() || this.isDismissed() || InstallBanner.isStandaloneMode()) {
+      return;
     }
+
+    this.banner.hidden = false;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.banner.classList.add('active'));
+    });
   }
 
   hide() {
-    if (this.banner) {
-      this.banner.hidden = true;
-      this.banner.classList.remove('active');
+    if (!this.banner) {
+      return;
     }
+
+    this.banner.classList.remove('active');
+    window.setTimeout(() => {
+      if (!this.banner.classList.contains('active')) {
+        this.banner.hidden = true;
+      }
+    }, 260);
   }
 
-  async install() {
+  async handleInstall() {
     if (!this.deferredPrompt) {
-      // Only prompt install from real deferred event.
       return;
     }
 
@@ -103,6 +121,15 @@ class InstallBanner {
     this.hide();
   }
 
+  setDefaultCopy() {
+    if (this.titleElement) {
+      this.titleElement.textContent = 'Add to Home Screen';
+    }
+    if (this.descriptionElement) {
+      this.descriptionElement.textContent = 'Install this card for quick access';
+    }
+  }
+
   markInstalled() {
     localStorage.setItem(this.installedKey, '1');
   }
@@ -111,11 +138,7 @@ class InstallBanner {
     return localStorage.getItem(this.installedKey) === '1';
   }
 
-  isInstallDismissed() {
+  isDismissed() {
     return localStorage.getItem(this.dismissedKey) === '1';
-  }
-
-  shouldHideBanner() {
-    return InstallBanner.isStandalone() || this.wasInstalled() || this.isInstallDismissed();
   }
 }
