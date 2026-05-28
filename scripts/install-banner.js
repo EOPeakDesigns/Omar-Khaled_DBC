@@ -9,6 +9,8 @@ class InstallBanner {
     this.dismissButton = dismissButton;
     this.deferredPrompt = null;
     this.descriptionElement = document.getElementById('installDescription');
+    this.titleElement = document.getElementById('installTitle');
+    this.installedKey = 'dbc-pwa-installed';
 
     this.init();
   }
@@ -22,18 +24,22 @@ class InstallBanner {
 
   init() {
     if (!this.banner || InstallBanner.isStandalone()) {
+      this.markInstalled();
       this.hide();
       return;
     }
 
     window.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
+      localStorage.removeItem(this.installedKey);
       this.deferredPrompt = event;
+      this.setNativeInstallMode();
       this.show();
     });
 
     window.addEventListener('appinstalled', () => {
       this.deferredPrompt = null;
+      this.markInstalled();
       this.hide();
     });
 
@@ -45,9 +51,14 @@ class InstallBanner {
       this.dismissButton.addEventListener('click', () => this.dismiss());
     }
 
-    // Show for non-installed users on every visit/reload.
-    this.show();
+    if (this.wasInstalled()) {
+      this.hide();
+      return;
+    }
+
+    this.setNativeInstallMode();
     this.applyPlatformHint();
+    this.show();
   }
 
   show() {
@@ -67,13 +78,24 @@ class InstallBanner {
   async install() {
     if (!this.deferredPrompt) {
       this.applyPlatformHint();
+      if (this.descriptionElement && !this.isIOSSafari()) {
+        this.descriptionElement.textContent = 'If install does not start, use your browser menu and choose Install app or Add to Home Screen.';
+      }
+      this.show();
       return;
     }
 
     this.deferredPrompt.prompt();
-    await this.deferredPrompt.userChoice;
+    const choice = await this.deferredPrompt.userChoice;
     this.deferredPrompt = null;
-    this.dismiss();
+
+    if (choice.outcome === 'accepted') {
+      this.markInstalled();
+      this.hide();
+    } else {
+      this.setNativeInstallMode();
+      this.show();
+    }
   }
 
   dismiss() {
@@ -86,12 +108,53 @@ class InstallBanner {
       return;
     }
 
-    const ua = navigator.userAgent || '';
-    const isIOS = /iPad|iPhone|iPod/.test(ua);
-    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-
-    if (isIOS && isSafari && !InstallBanner.isStandalone()) {
-      this.descriptionElement.textContent = 'On iPhone: tap Share, then Add to Home Screen.';
+    if (this.isIOSSafari() && !InstallBanner.isStandalone()) {
+      this.setManualInstallMode('On iPhone: tap Share, then Add to Home Screen.');
     }
+  }
+
+  setNativeInstallMode() {
+    if (this.titleElement) {
+      this.titleElement.textContent = 'Add to Home Screen';
+    }
+    if (this.descriptionElement) {
+      this.descriptionElement.textContent = 'Install this card for quick access';
+    }
+    if (this.installButton) {
+      this.installButton.hidden = false;
+      this.installButton.disabled = false;
+      this.installButton.textContent = 'Install';
+      this.installButton.setAttribute('aria-disabled', 'false');
+    }
+  }
+
+  setManualInstallMode(message = 'Use your browser menu to add this card to your Home Screen.') {
+    if (this.titleElement) {
+      this.titleElement.textContent = 'Add to Home Screen';
+    }
+    if (this.descriptionElement) {
+      this.descriptionElement.textContent = message;
+    }
+    if (this.installButton) {
+      this.installButton.hidden = false;
+      this.installButton.disabled = false;
+      this.installButton.textContent = 'Install';
+      this.installButton.setAttribute('aria-disabled', 'false');
+    }
+  }
+
+  markInstalled() {
+    localStorage.setItem(this.installedKey, '1');
+  }
+
+  wasInstalled() {
+    return localStorage.getItem(this.installedKey) === '1';
+  }
+
+  isIOSSafari() {
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
+    return isIOS && isSafari;
   }
 }
