@@ -1,0 +1,232 @@
+/**
+ * Modal Component Stylesheet
+ * Styles for QR code modal overlay and content
+ * 
+ * @author Eng. Eslam Osama Saad - EOPeak
+ * @project Digital Business Card - General Manager
+ * @version 1.0.0
+ */
+
+/* ==========================================
+   MODAL OVERLAY
+   ========================================== */
+
+/**
+ * Modal overlay backdrop
+ * Full-screen semi-transparent dark background
+ * Uses visibility pattern to prevent interaction when hidden
+ */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+/**
+ * Active modal state
+ * Shows modal with fade-in effect
+ */
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ==========================================
+   MODAL CONTENT
+   ========================================== */
+
+/**
+ * Modal content container
+ * White card with rounded corners containing QR code
+ * Scales up when modal becomes active
+ */
+.modal-content {
+  background-color: var(--surface, white);
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 350px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  transform: scale(0.8);
+  transition: transform 0.3s ease-in-out;
+}
+
+/**
+ * Modal content active state
+ * Smooth scale animation for entrance effect
+ */
+.modal.active .modal-content {
+  transform: scale(1);
+}
+
+/* ==========================================
+   MODAL CLOSE BUTTON
+   ========================================== */
+
+/**
+ * Close button
+ * Positioned at top-right corner of modal
+ * Standard UX pattern for modal dismissal
+ */
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: inherit;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* ==========================================
+   MODAL CONTENT ELEMENTS
+   ========================================== */
+
+/**
+ * Modal heading
+ * Provides context for QR code functionality
+ */
+.modal h3 {
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/**
+ * QR code container
+ * Centers the generated QR code canvas
+ */
+.qr-container {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.qr-code-img {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin: 0 auto;
+}
+
+.qr-fallback {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  border: 2px dashed rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* ==========================================
+   DOWNLOAD BUTTON
+   ========================================== */
+
+/**
+ * Download QR code button
+ * Styled as pill-shaped CTA with brand color
+ * Includes hover effect for user feedback
+ */
+.download-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #FFC107;
+  color: white;
+  border-radius: 30px;
+  margin-top: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+}
+
+.video-modal-content {
+  max-width: 420px;
+}
+
+.video-owner-line {
+  margin-top: -8px;
+  margin-bottom: 8px;
+  color: #7a7a7a;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.video-highlights {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.video-highlight-item {
+  background-color: rgba(255, 193, 7, 0.16);
+  color: #7a5700;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.video-container {
+  margin-top: 14px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #111;
+}
+
+.video-container video {
+  width: 100%;
+  display: block;
+}
+
+/**
+ * Download button hover effect
+ * Darker background and subtle lift animation
+ */
+.download-btn:hover {
+  background-color: #e0a800;
+  transform: translateY(-2px);
+}
+
+.download-btn:focus-visible,
+.modal-close:focus-visible {
+  outline: 2px solid rgba(255, 193, 7, 0.7);
+  outline-offset: 2px;
+}
+
+body[data-theme='dark'] .modal-content {
+  color: #f3f3f3;
+}
+
+body[data-theme='dark'] .video-owner-line {
+  color: #d8d8d8;
+}
+
+body[data-theme='dark'] .video-highlight-item {
+  background-color: rgba(255, 193, 7, 0.24);
+  color: #ffdc72;
+}
+

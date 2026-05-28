@@ -1,0 +1,25 @@
+{
+  "name": "Omar Khaled - Digital Business Card",
+  "short_name": "Omar Khaled",
+  "description": "Digital business card for Omar Khaled, General Manager",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f5f5",
+  "theme_color": "#FFC107",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

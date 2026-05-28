@@ -1,0 +1,59 @@
+{
+  "owner": {
+    "name": "Omar Khaled",
+    "nameAr": "عمر خالد",
+    "title": "General Manager",
+    "titleAr": "المدير العام",
+    "category": "",
+    "bio": "",
+    "bioAr": "",
+    "image": "assets/owner.webp",
+    "imageAlt": "Omar Khaled - General Manager Profile Photo",
+    "initials": "OK",
+    "video": "assets/profile-video.mp4",
+    "specialties": [
+      "Leadership",
+      "Business Strategy",
+      "Operations Excellence"
+    ],
+    "specialtiesAr": [
+      "القيادة",
+      "استراتيجية الأعمال",
+      "التميز التشغيلي"
+    ]
+  },
+  "contact": {
+    "phone": "+201001234567",
+    "phoneDisplay": "+20 100 123 4567",
+    "email": "o.khaled@gmail.com",
+    "address": "Cairo, Egypt",
+    "mapsUrl": "https://maps.google.com/?q=Cairo,+Egypt",
+    "website": "https://okcorp.com",
+    "websiteDisplay": "okcorp.com",
+    "whatsapp": "20100123456",
+    "addressAr": "القاهرة، مصر"
+  },
+  "social": [
+    { "id": "facebook", "url": "https://facebook.com", "label": "Facebook Profile", "icon": "fab fa-facebook-f" },
+    { "id": "instagram", "url": "https://instagram.com", "label": "Instagram Profile", "icon": "fab fa-instagram" },
+    { "id": "twitter", "url": "https://twitter.com", "label": "X (Twitter) Profile", "icon": "fab fa-x-twitter" },
+    { "id": "linkedin", "url": "https://linkedin.com", "label": "LinkedIn Profile", "icon": "fab fa-linkedin-in" }
+  ],
+  "qr": {
+    "image": "assets/MYQR.png",
+    "downloadFilename": "omar-khaled-qrcode.png"
+  },
+  "meta": {
+    "title": "Omar Khaled - Digital Business Card",
+    "description": "Digital Business Card - Omar Khaled, General Manager",
+    "author": "Eng. Eslam Osama Saad - EOPeak",
+    "canonical": "https://digitalcard.example.com/omarkhaled",
+    "themeColor": "#FFC107",
+    "ogImage": "assets/owner.webp"
+  },
+  "pwa": {
+    "name": "Omar Khaled",
+    "shortName": "Omar Khaled",
+    "description": "Digital business card for Omar Khaled, General Manager"
+  }
+}

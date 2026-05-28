@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <!-- ==========================================
+       META TAGS
+       ========================================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Digital Business Card - Omar Khaled, General Manager">
+  <meta name="author" content="Eng. Eslam Osama Saad - EOPeak">
+  <meta name="theme-color" content="#FFC107">
+  <meta property="og:title" content="Omar Khaled - Digital Business Card">
+  <meta property="og:description" content="Digital Business Card - Omar Khaled, General Manager">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://digitalcard.example.com/omarkhaled">
+  <meta property="og:image" content="assets/owner.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Omar Khaled - Digital Business Card">
+  <meta name="twitter:description" content="Digital Business Card - Omar Khaled, General Manager">
+  <meta name="twitter:image" content="assets/owner.webp">
+  
+  <!-- ==========================================
+       TITLE
+       ========================================== -->
+  <title>Omar Khaled - Digital Business Card</title>
+  
+  <!-- ==========================================
+       FAVICON
+       Professional favicon with owner's initials
+       ========================================== -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="alternate icon" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="canonical" href="https://digitalcard.example.com/omarkhaled">
+  
+  <!-- ==========================================
+       EXTERNAL FONTS & ICONS
+       ========================================== -->
+  <!-- Font Awesome 6.4.2 - Icon library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  
+  <!-- Google Fonts - Montserrat typeface -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap">
+  
+  <!-- ==========================================
+       APPLICATION STYLESHEETS
+       Modular CSS architecture for maintainability
+       ========================================== -->
+  <!-- Core styles: Reset, body, animations -->
+  <link rel="stylesheet" href="styles/main.css">
+  
+  <!-- Card component styles -->
+  <link rel="stylesheet" href="styles/card.css">
+  
+  <!-- Modal component styles -->
+  <link rel="stylesheet" href="styles/modal.css">
+  
+  <!-- Responsive breakpoints -->
+  <link rel="stylesheet" href="styles/responsive.css">
+  
+</head>
+
+<body>
+  <a href="#mainContent" class="skip-link" id="skipLink">Skip to main content</a>
+  <div class="sr-only" aria-live="polite" id="liveRegion"></div>
+
+  <div class="install-banner" id="installBanner" hidden>
+    <div class="install-banner-content">
+      <p class="install-title" id="installTitle">Add to Home Screen</p>
+      <p class="install-description" id="installDescription">Install this card for quick access</p>
+    </div>
+    <div class="install-banner-actions">
+      <button class="install-btn" id="installAction" type="button">Install</button>
+      <button class="install-btn install-btn-secondary" id="installDismiss" type="button">Not now</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MAIN CARD CONTAINER
+       ========================================== -->
+  <main class="card-container" id="mainContent" tabindex="-1">
+    <!-- 
+      Business Card Component
+      Displays professional contact information
+      with QR code generation capability
+    -->
+    <div class="card">
+      
+      <!-- ==========================================
+           CARD HEADER SECTION
+           Decorative header with profile image
+           ========================================== -->
+      <div class="card-header">
+        <!-- Wave background with accent decorations -->
+        <div class="wave-bg">
+          <!-- Decorative accent elements -->
+          <div class="accent-circle-1"></div>
+          <div class="accent-circle-2"></div>
+          <div class="accent-line"></div>
+        </div>
+
+        <div class="header-actions" aria-label="Card utilities">
+          <button class="social-btn" id="themeToggle" aria-label="Toggle theme" type="button">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </button>
+
+          <button class="social-btn lang-toggle" id="langToggle" aria-label="Switch language" type="button">AR</button>
+
+          <button class="social-btn" id="saveContact" aria-label="Save contact" type="button">
+            <i class="fas fa-address-card" aria-hidden="true"></i>
+          </button>
+
+          <button class="social-btn" id="shareCard" aria-label="Share digital card" type="button">
+            <i class="fas fa-share-nodes" aria-hidden="true"></i>
+          </button>
+        </div>
+        
+        <!-- Profile image container (rotated diamond shape) -->
+        <button class="profile-image video-avatar-btn" id="openVideo" type="button" aria-label="Play profile video">
+          <img 
+            src="assets/owner.webp" 
+            alt="Omar Khaled - General Manager Profile Photo">
+          <span class="avatar-play" aria-hidden="true"><i class="fas fa-play"></i></span>
+        </button>
+      </div>
+      
+      <!-- ==========================================
+           CARD BODY SECTION
+           Name, position, and contact information
+           ========================================== -->
+      <div class="card-body">
+        <!-- Primary heading: Name -->
+        <h1 class="name">Omar Khaled</h1>
+        
+        <!-- Secondary heading: Position/Title -->
+        <h2 class="position">General Manager</h2>
+
+        <!-- Contact information grid -->
+        <div class="contact-info">
+          
+          <!-- Phone contact - WhatsApp -->
+          <div class="contact-item contact-item-composite" data-contact="phone">
+            <a href="tel:+201001234567" class="contact-item-main" aria-label="Call phone number">
+            <div class="contact-icon" aria-hidden="true">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div class="contact-text">+20 100 123 4567</div>
+            </a>
+            <a href="https://wa.me/20100123456" target="_blank" rel="noopener noreferrer" class="contact-side-btn" aria-label="Contact via WhatsApp">
+              <i class="fab fa-whatsapp" aria-hidden="true"></i>
+            </a>
+            <button class="copy-btn" data-copy="+20 100 123 4567" aria-label="Copy phone number" type="button">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+          
+          <!-- Email contact - Gmail -->
+          <div class="contact-item contact-item-composite" data-contact="email">
+            <a href="https://mail.google.com/mail/?view=cm&to=o.khaled@gmail.com" target="_blank" rel="noopener noreferrer" class="contact-item-main" aria-label="Send email via Gmail">
+            <div class="contact-icon" aria-hidden="true">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text">o.khaled@gmail.com</div>
+            </a>
+            <button class="copy-btn" data-copy="o.khaled@gmail.com" aria-label="Copy email address" type="button">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+          
+          <!-- Physical address -->
+          <div class="contact-item" data-contact="address">
+            <a href="https://maps.google.com/?q=Cairo,+Egypt" target="_blank" rel="noopener noreferrer" class="contact-item-main" aria-label="Open address in maps">
+            <div class="contact-icon" aria-hidden="true">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-text">Cairo, Egypt</div>
+            </a>
+          </div>
+          
+          <!-- Website URL -->
+          <div class="contact-item" data-contact="website">
+            <a href="https://okcorp.com" target="_blank" rel="noopener noreferrer" class="contact-item-main" aria-label="Visit website">
+            <div class="contact-icon" aria-hidden="true">
+              <i class="fas fa-globe"></i>
+            </div>
+            <div class="contact-text">okcorp.com</div>
+            </a>
+          </div>
+          
+        </div>
+        
+        <!-- ==========================================
+             SOCIAL MEDIA & QR SECTION
+             Bottom bar with social links and QR code
+             ========================================== -->
+        <div class="social-media-bar">
+          <div id="socialLinks" class="social-links" aria-label="Social profiles">
+          <!-- Facebook -->
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook Profile">
+            <i class="fab fa-facebook-f" aria-hidden="true"></i>
+          </a>
+          
+          <!-- Instagram -->
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram Profile">
+            <i class="fab fa-instagram" aria-hidden="true"></i>
+          </a>
+          
+          <!-- X (Twitter) -->
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="X (Twitter) Profile">
+            <i class="fab fa-x-twitter" aria-hidden="true"></i>
+          </a>
+          
+          <!-- LinkedIn -->
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn Profile">
+            <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+          </a>
+          </div>
+
+          <!-- QR Code -->
+          <button class="social-btn" id="showQR" aria-label="Show QR Code" type="button">
+            <i class="fas fa-qrcode" aria-hidden="true"></i>
+          </button>
+        </div>
+        
+      </div>
+      
+    </div>
+  </main>
+
+  <!-- ==========================================
+       QR CODE MODAL
+       Overlay modal for QR code display and download
+       ========================================== -->
+  <div class="modal" id="qrModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription" aria-hidden="true">
+    <div class="modal-content">
+      
+      <!-- Modal close button -->
+      <button class="modal-close" id="closeModal" aria-label="Close modal" type="button">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+      
+      <!-- Modal heading -->
+      <h3 id="modalTitle">Scan QR Code</h3>
+      
+      <!-- Modal description -->
+      <p id="modalDescription">Scan this code to view my digital profile</p>
+      
+      <!-- QR code container (dynamically populated) -->
+      <div class="qr-container" id="qrCode"></div>
+      
+      <!-- Download button -->
+      <a href="#" class="download-btn" id="downloadQR">Download QR Code</a>
+      
+    </div>
+  </div>
+
+  <div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-describedby="videoDescription" aria-hidden="true">
+    <div class="modal-content video-modal-content">
+      <button class="modal-close" id="closeVideoModal" aria-label="Close video modal" type="button">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+      <p id="videoDescription">Watch a short introduction</p>
+      <ul class="video-highlights" id="videoHighlights">
+        <li class="video-highlight-item">Leadership</li>
+        <li class="video-highlight-item">Business Strategy</li>
+        <li class="video-highlight-item">Operations Excellence</li>
+      </ul>
+      <div class="video-container">
+        <video id="profileVideo" controls preload="none" playsinline>
+          <source id="profileVideoSource" src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       APPLICATION SCRIPTS
+       Modular JavaScript architecture
+       ========================================== -->
+  <script src="scripts/focus-trap.js"></script>
+  <!-- Modal handler module -->
+  <script src="scripts/modal-handler.js"></script>
+  
+  <!-- QR code handler module -->
+  <script src="scripts/qr-handler.js"></script>
+  
+  <!-- Copy to clipboard handler module -->
+  <script src="scripts/copy-handler.js"></script>
+  
+  <script src="scripts/vcard-handler.js"></script>
+  <script src="scripts/share-handler.js"></script>
+  <script src="scripts/card-renderer.js"></script>
+  <script src="scripts/install-banner.js"></script>
+  <script src="scripts/theme-handler.js"></script>
+  <script src="scripts/language-handler.js"></script>
+  <script src="scripts/video-handler.js"></script>
+
+  <!-- Main application entry point -->
+  <script src="scripts/app.js"></script>
+  
+</body>
+</html>

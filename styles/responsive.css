@@ -1,0 +1,195 @@
+/**
+ * Responsive Stylesheet
+ * Mobile-first responsive design breakpoints and adjustments
+ * 
+ * @author Eng. Eslam Osama Saad - EOPeak
+ * @project Digital Business Card - General Manager
+ * @version 1.0.0
+ */
+
+/* ==========================================
+   TABLET & MOBILE BREAKPOINT (max-width: 768px)
+   Touch device optimizations
+   ========================================== */
+
+/**
+ * Disable hover effects for touch devices (tablets and mobile)
+ * Hover effects don't translate well to touch interfaces
+ * Improves UX on tablets and mobile devices
+ */
+@media (max-width: 768px) {
+  /**
+   * Disable social button hover effects
+   */
+  .social-btn:hover {
+    background-color: #FFC107;
+    transform: none;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /**
+   * Disable contact item hover effects
+   * Prevents scale and background tint on touch devices
+   */
+  .contact-item:hover {
+    transform: none;
+    background-color: transparent;
+  }
+  
+  /**
+   * Disable copy button hover effects
+   * Maintains original state on touch devices
+   */
+  .copy-btn:hover:not(:disabled) {
+    background-color: #FFC107;
+    transform: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /**
+   * Disable download button hover effects
+   * Maintains original state for clean touch UX
+   */
+  .download-btn:hover {
+    background-color: #FFC107;
+    transform: none;
+  }
+}
+
+/* ==========================================
+   MOBILE BREAKPOINT (max-width: 480px)
+   ========================================== */
+
+/**
+ * Mobile optimizations for screens 480px and below
+ * Adjusts spacing, sizing, and typography for smaller viewports
+ */
+@media (max-width: 480px) {
+  /**
+   * Reduced container padding for mobile
+   * Maximizes available screen space
+   */
+  .card-container {
+    padding: 10px;
+  }
+  
+  /**
+   * Condensed card body padding for mobile
+   * Maintains visual hierarchy while optimizing space
+   * Ensures name appears fully above diamond frame on mobile
+   */
+  .card-body {
+    padding: 100px 20px 20px;
+  }
+  
+  /**
+   * Card background optimization for mobile
+   * Ensures proper coverage and positioning on smaller screens
+   */
+  .card {
+    background-size: cover;
+    background-position: center center;
+  }
+  
+  /**
+   * Smaller profile image for mobile
+   * Maintains split positioning between header and body
+   * Upper half in header, lower half in content area
+   */
+  .profile-image {
+    width: 130px;
+    height: 130px;
+    top: 100%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  
+  /**
+   * Proportional image sizing for mobile
+   * Maintains same 20% larger ratio as desktop (156px for 130px frame)
+   */
+  .profile-image img {
+    width: 156px;
+    height: 156px;
+    left: -13px;
+    top: -13px;
+  }
+  
+  /**
+   * Reduced name heading size
+   * Ensures readability on smaller screens
+   */
+  .name {
+    font-size: 1.3rem;
+  }
+  
+  /**
+   * Adjusted position text size
+   * Proportional scaling for mobile typography
+   */
+  .position {
+    font-size: 0.9rem;
+  }
+  
+  /**
+   * Copy button mobile optimization
+   * Slightly smaller for better mobile fit
+   */
+  .copy-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 0.75rem;
+    margin-left: 6px;
+  }
+
+  .contact-side-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  /**
+   * Social media bar mobile optimization
+   * Adjusted spacing and button sizes for small screens
+   */
+  .social-media-bar {
+    gap: 10px;
+    padding: 0 15px 15px;
+    margin-top: 1rem;
+  }
+  
+  /**
+   * Social buttons mobile sizing
+   * Maintains perfect circular shape on small screens
+   */
+  .social-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    font-size: 1rem;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
+  .header-actions {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+
+  .header-actions .social-btn {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    max-width: 34px;
+    max-height: 34px;
+    font-size: 0.85rem;
+  }
+
+  .install-banner {
+    align-items: flex-start;
+  }
+}
+
