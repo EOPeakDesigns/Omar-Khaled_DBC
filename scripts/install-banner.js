@@ -103,7 +103,7 @@ class InstallBanner {
     if (!this.deferredPrompt) {
       if (this.descriptionElement) {
         this.descriptionElement.textContent =
-          'Use browser menu > Add to Home screen if Install prompt is not available yet.';
+          'This card is either already installed on your device or installation is not supported on your current device.';
       }
       this.show();
       return;
