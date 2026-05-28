@@ -202,6 +202,14 @@
   display: block;
 }
 
+.video-container iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  display: block;
+  border: 0;
+}
+
 /**
  * Download button hover effect
  * Darker background and subtle lift animation

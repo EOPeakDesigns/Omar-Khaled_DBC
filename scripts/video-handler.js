@@ -13,6 +13,7 @@ class VideoHandler {
     this.labels = labels;
     this.focusTrap = this.modal ? new FocusTrap(this.modal) : null;
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.originalFrameSrc = this.video && this.video.tagName === 'IFRAME' ? this.video.getAttribute('src') : null;
   }
 
   init() {
@@ -28,7 +29,7 @@ class VideoHandler {
       }
     });
 
-    if (this.source && this.cardData?.owner?.video) {
+    if (this.source && this.video && this.video.tagName === 'VIDEO' && this.cardData?.owner?.video) {
       this.source.src = this.cardData.owner.video;
       this.video.load();
     }
@@ -79,8 +80,15 @@ class VideoHandler {
     this.modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', this.handleKeyDown);
-    this.video.pause();
-    this.video.currentTime = 0;
+    if (this.video.tagName === 'VIDEO') {
+      this.video.pause();
+      this.video.currentTime = 0;
+    } else if (this.video.tagName === 'IFRAME') {
+      // Reset iframe src to stop YouTube playback on modal close.
+      const currentSrc = this.video.getAttribute('src');
+      this.video.setAttribute('src', '');
+      this.video.setAttribute('src', currentSrc || this.originalFrameSrc || '');
+    }
     if (this.focusTrap) {
       this.focusTrap.deactivate();
     }

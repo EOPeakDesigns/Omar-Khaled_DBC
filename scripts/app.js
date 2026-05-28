@@ -77,8 +77,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     openVideoButton: document.getElementById('openVideo'),
     videoModal: document.getElementById('videoModal'),
     closeVideoModalButton: document.getElementById('closeVideoModal'),
-    profileVideo: document.getElementById('profileVideo'),
-    profileVideoSource: document.getElementById('profileVideoSource')
+    profileVideo: document.getElementById('profileVideoFrame'),
+    profileVideoSource: null
   };
 
   const qrConfig = cardData?.qr || {
