@@ -72,6 +72,9 @@ class InstallBanner {
         this.hide();
       }
     });
+
+    this.setDefaultCopy();
+    this.show();
   }
 
   show() {
@@ -100,6 +103,11 @@ class InstallBanner {
 
   async handleInstall() {
     if (!this.deferredPrompt) {
+      if (this.descriptionElement) {
+        this.descriptionElement.textContent =
+          'Use browser menu > Add to Home screen if Install prompt is not available yet.';
+      }
+      this.show();
       return;
     }
 

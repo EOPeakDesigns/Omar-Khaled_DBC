@@ -73,7 +73,7 @@ class CardRenderer {
     });
 
     this.updateContactItem('email', {
-      href: `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(card.contact.email)}`,
+      href: `mailto:${card.contact.email}`,
       text: card.contact.email,
       copy: card.contact.email,
       aria: labels.emailAria || 'Send email'
