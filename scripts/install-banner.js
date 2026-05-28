@@ -114,7 +114,6 @@ class InstallBanner {
     this.deferredPrompt = null;
 
     if (choice.outcome === 'accepted') {
-      this.markInstalled();
       this.hide();
     } else {
       this.hide();

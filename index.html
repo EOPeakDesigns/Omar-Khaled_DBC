@@ -266,17 +266,17 @@
         <li class="video-highlight-item">Operations Excellence</li>
       </ul>
       <div class="video-container">
-        <iframe
-          id="profileVideoFrame"
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/2Ri8f-wqonE?si=RndpuJJSEcH1aP6X"
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen>
-        </iframe>
+        <div class="video-embed">
+          <iframe
+            id="profileVideoFrame"
+            data-src="https://www.youtube.com/embed/2Ri8f-wqonE?playsinline=1&rel=0&modestbranding=1"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -301,7 +301,7 @@
   <script src="scripts/install-banner.js?v=2"></script>
   <script src="scripts/theme-handler.js"></script>
   <script src="scripts/language-handler.js"></script>
-  <script src="scripts/video-handler.js"></script>
+  <script src="scripts/video-handler.js?v=2"></script>
 
   <!-- Main application entry point -->
   <script src="scripts/app.js"></script>

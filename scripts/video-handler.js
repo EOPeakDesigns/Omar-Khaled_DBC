@@ -1,6 +1,6 @@
 /**
  * Video Handler Module
- * Handles avatar video modal open/close and playback lifecycle.
+ * Handles avatar video modal open/close and YouTube embed lifecycle.
  */
 class VideoHandler {
   constructor(openButton, modalElement, closeButton, videoElement, sourceElement, cardData, labels = {}) {
@@ -13,11 +13,13 @@ class VideoHandler {
     this.labels = labels;
     this.focusTrap = this.modal ? new FocusTrap(this.modal) : null;
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.originalFrameSrc = this.video && this.video.tagName === 'IFRAME' ? this.video.getAttribute('src') : null;
+    this.embedUrl =
+      (this.video && this.video.getAttribute('data-src')) ||
+      'https://www.youtube.com/embed/2Ri8f-wqonE?playsinline=1&rel=0&modestbranding=1';
   }
 
   init() {
-    if (!this.openButton || !this.modal || !this.closeButton || !this.video) {
+    if (!this.openButton || !this.modal || !this.closeButton) {
       return;
     }
 
@@ -65,11 +67,38 @@ class VideoHandler {
     }
   }
 
+  loadEmbed() {
+    if (!this.video || this.video.tagName !== 'IFRAME') {
+      return;
+    }
+
+    const src = this.video.getAttribute('data-src') || this.embedUrl;
+    if (!src) {
+      return;
+    }
+
+    // Load only when modal opens so mobile browsers paint the iframe reliably.
+    if (this.video.getAttribute('src') !== src) {
+      this.video.setAttribute('src', src);
+    }
+  }
+
+  unloadEmbed() {
+    if (!this.video || this.video.tagName !== 'IFRAME') {
+      return;
+    }
+
+    this.video.setAttribute('src', '');
+  }
+
   open() {
     this.modal.classList.add('active');
     this.modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', this.handleKeyDown);
+
+    this.loadEmbed();
+
     if (this.focusTrap) {
       this.focusTrap.activate();
     }
@@ -80,19 +109,20 @@ class VideoHandler {
     this.modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', this.handleKeyDown);
-    if (this.video.tagName === 'VIDEO') {
+
+    if (this.video && this.video.tagName === 'VIDEO') {
       this.video.pause();
       this.video.currentTime = 0;
-    } else if (this.video.tagName === 'IFRAME') {
-      // Reset iframe src to stop YouTube playback on modal close.
-      const currentSrc = this.video.getAttribute('src');
-      this.video.setAttribute('src', '');
-      this.video.setAttribute('src', currentSrc || this.originalFrameSrc || '');
+    } else {
+      this.unloadEmbed();
     }
+
     if (this.focusTrap) {
       this.focusTrap.deactivate();
     }
-    this.openButton.focus();
+    if (this.openButton) {
+      this.openButton.focus();
+    }
   }
 
   handleKeyDown(event) {

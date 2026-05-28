@@ -201,5 +201,17 @@
     align-items: flex-start;
   }
 
+  .video-modal-content {
+    width: min(94vw, 420px);
+    max-height: min(90dvh, 90vh);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px 16px 16px;
+  }
+
+  .video-embed {
+    min-height: 180px;
+  }
+
 }
 
